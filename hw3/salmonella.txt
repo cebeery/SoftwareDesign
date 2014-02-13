@@ -1,0 +1,6 @@
+
+
+ATP synthase                       SpaL [Salmonella enterica]
+antigen presentation protein       SpaN [Salmonella enterica] 
+type III secretion system protein  SpaO [Salmonella enterica] 
+type III secretion system protein  SpaS [Salmonella enterica] 
