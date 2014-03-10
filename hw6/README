@@ -1,0 +1,31 @@
+Too Many Dragons
+by Logan Davis and Claire Beery
+
+__Credits__
+
+Game play based on java game 'Too Many Ninjas'.
+
+The Hero sprite is from Fire Emblem: The Sealed Sword (some modifications).
+
+The Dragon sprite is from http://kunalmaemo.blogspot.com/2010/07/sprite-animation-from-sprite-sheet-in.html, (some modifications).
+
+The background is from http://www.pixeljoint.com/pixelart/69875.htm, (some modifications).
+
+__Controls__
+
+a: shield to left
+w: shield up
+d: shield to right
+q: shield upperleft diagonal
+e: shield upperright diagonal
+
+__Score__
+
+1 pt per fireball deflected
+5 pt per dragon slain
+
+__Running the Game__ 
+
+To run 'Too Many Dragons', pull the game code and images from the too_many_dragons folder. Run the code within. A pygame window should appear in which terrifying dragons fly accross the sky, occationally shooting fiery balls of terror in the direction of the heroine (visualized in third person in the center-ish of the screen for your playing pleasure). Using your magic shield, you must fend off the ever-increasing hoard of beasties until there are... TOO MANY DRAGONS.
+
+

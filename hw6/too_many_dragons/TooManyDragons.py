@@ -17,7 +17,7 @@ class TooManyDragonsModel:
     def __init__(self,screenSize):
         """ Initiates starting state of game """
         self.screen = [0,screenSize[0],0,screenSize[1]]
-    
+        #initiate lists for fireballs and dragons, which will be used to keep track of multiple instances later 
         self.fireballs = []
         self.dragons = []
         self.hero = Hero(self)
@@ -32,6 +32,7 @@ class TooManyDragonsModel:
         if self.dragon_frequency < time.clock():
             newDragon = Dragon(self) 
             self.dragons.append(newDragon)
+            #the rate of dragon appearances increases as more dragons appear, until there are TOO MANY DRAGONS
             self.dragon_frequency += (10.0 * (1.9/2.0)**self.spawnOfEvilCt)
             self.spawnOfEvilCt += 1
             
@@ -39,7 +40,7 @@ class TooManyDragonsModel:
         """ Delete sprites that are not on screen """
         newDragonList = []
         newFireballList = []        
-        
+        #things are on the screen are the only ones on the relevant lists
         for dragon in self.dragons:
             if dragon.x < (self.screen[1] + 2*dragon.icon.get_width()) and dragon.x > (self.screen[0] - 2*dragon.icon.get_width()):
                 newDragonList.append(dragon)    
@@ -64,12 +65,14 @@ class TooManyDragonsModel:
                 if fireball.bounced:                    
                     if self.checkCollision(fireball, [dragon.x,dragon.y,dragon.icon.get_width(),dragon.icon.get_height()]):
                         del self.dragons[dragonIndex]
+                        #5 points per kill
                         score += 5
                         break
                     dragonIndex += 1             
             else:		
                 if self.checkCollision(fireball, [self.hero.hitbox.x,self.hero.hitbox.y,self.hero.hitbox.width,self.hero.hitbox.height]):
-                    if fireball.bounced == False:                        
+                    if fireball.bounced == False: 
+                        #different behavior for vertical shield position
                         if position == 5:                            
                             fireball.vx = fireball.vx
                             fireball.vy = - fireball.vy
@@ -77,9 +80,11 @@ class TooManyDragonsModel:
                             fireball.vx = - fireball.vx
                             fireball.vy = - fireball.vy
                         score += 1
+                        #tell fireball it has bounced                        
                         fireball.bounced = 1
                     newFireballList.append(fireball)
                 elif self.checkCollision(fireball, [self.hero.x,self.hero.y,self.hero.icon.get_width(),self.hero.icon.get_height()]):
+                    #if fireball hits heroine, game over                    
                     running = 0
                 else:
                     newFireballList.append(fireball)
@@ -118,6 +123,7 @@ class Hero:
         
     def update(self):
         global position
+        #change icon based on keypress
         self.icon = pygame.image.load('hero'+str(position)+'.png').convert()
         self.icon.set_colorkey((255,0,234), RLEACCEL)
         self.hitbox.update()
@@ -132,7 +138,7 @@ class Hitbox:
         self.center = center
         
     def update(self):
-        
+        """Hitbox position varies based on the position of the heroine as input by the key commands"""
         global position
         if position == 0:
             self.x = 1000
@@ -163,7 +169,7 @@ class Dragon:
         self.icon = pygame.image.load('dargon1.png').convert() # asssumes one frame of animation 
         self.counter = 1
         self.lastswitch = 0
-
+        #dragon spawns on random side of the screen
         self.direction = choice(['left','right'])
         
         if self.direction == 'left':
@@ -177,11 +183,11 @@ class Dragon:
             self.x = self.model.screen[1]
             self.y = randint(0,self.model.screen[3] - self.icon.get_height()-150)
             self.vx = randint(5,15)  * -0.15
-            self.mouth = [5,80]
+            self.mouth = [5,80] #mouth location for shooting great balls of fire from
                 
         else:
             print 'Creation of Dragon Surface Error' 
-        
+        #make the pink background of the dragon .png invisible (easier than using transparent images)
         self.icon.set_colorkey((255,0,234), RLEACCEL)  
         self.fireballCt = 1 
         self.isAlive = 1
@@ -210,6 +216,7 @@ class Dragon:
                 self.model.fireballs.append(newFireball)
                 
     def vary_dragon(self):
+        """makes the dragon flap its wings using a time counter within each instance"""
         if time.clock() - self.lastswitch >= .4:
             if self.counter == 4:
                 self.counter = 1
@@ -218,8 +225,10 @@ class Dragon:
             self.lastswitch = time.clock()
             self.icon = pygame.image.load('dargon'+str(self.counter)+'.png').convert()
             self.icon.set_colorkey((255,0,234), RLEACCEL) 
+            #make sure to flip depending on side of origin
             if self.direction == 'right':
                 self.icon = pygame.transform.flip(self.icon, 1, 0)
+                
     def update(self):
         """ Updates status of dragon """
         self.vary_dragon()
@@ -261,10 +270,6 @@ class Fireball:
         self.x += self.vx
         self.y += self.vy
                 
-    
-#class ScoreText:
-    
-    
 class TooManyDragonsView:
     """ Creates rendered view of game state for user """      
     
@@ -277,6 +282,7 @@ class TooManyDragonsView:
         self.size = self.background.get_size() 
         
     def vary_background(self):
+        """changes the background image to create a pretty gif. see vary_dragon above"""
         if time.clock() - self.lastswitch >= .1:
             if self.counter == 8:
                 self.counter = 1
@@ -286,6 +292,7 @@ class TooManyDragonsView:
             self.background = pygame.image.load('Frame'+str(self.counter)+'.png').convert()
             
     def scoreDisplay(self):
+        """draws the score counter in the bottom left corner using .png sprites"""
         global score        
         lastDigits = 5
         for num in str(score):
@@ -293,9 +300,11 @@ class TooManyDragonsView:
             x = lastDigits
             numPic = pygame.image.load(str(num) + '.png').convert()
             self.screen.blit(numPic,(x,y))    
+            #add width of previous image before appending next one
             lastDigits += numPic.get_width() 
         
     def draw(self):
+        """render the game model for Too Many Dragons"""
         self.vary_background()
         self.screen.blit(self.background, (0,0))  #erase all objects on screen
         self.screen.blit(model.hero.icon,(model.hero.x,model.hero.y))
@@ -306,8 +315,6 @@ class TooManyDragonsView:
         
         for fireball in self.model.fireballs:
             pygame.draw.circle(self.screen, fireball.color, (int(fireball.x),int(fireball.y)), fireball.r)
-            
-        #pygame.draw.rect(self.screen, pygame.Color(255,255,255), pygame.Rect(self.model.hero.hitbox.x, self.model.hero.hitbox.y, 30, 30))
     
         pygame.display.update()
     
@@ -316,7 +323,8 @@ class TooManyDragonsController:
     def __init__(self, model):
         self.model = model
    
-    def handle_pygame_event(self, event):       
+    def handle_pygame_event(self, event):    
+        """keyboard controls"""
         global position       
         if event.type != KEYDOWN:
             position = 0
@@ -341,7 +349,7 @@ if __name__ == '__main__':
     screenSize = (640,400)    #note: change for background image size
     screen = pygame.display.set_mode(screenSize)   
     
-    
+    #mvc game design woooo
     model = TooManyDragonsModel(screenSize)
     view = TooManyDragonsView(model,screen)
     controller = TooManyDragonsController(model)
@@ -356,7 +364,7 @@ if __name__ == '__main__':
         model.update()
         view.draw()
         pygame.time.delay(10) #this compared to speed will determine reaction time and image smoothness
-
+    #game over behavior: show a death screen, wait, then quit
     screen.blit(pygame.image.load('gameover.png').convert(),(0,0))
     view.scoreDisplay()
     pygame.display.update()
