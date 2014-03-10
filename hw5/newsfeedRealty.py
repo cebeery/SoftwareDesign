@@ -168,7 +168,7 @@ def newsfeedRealty(api,time):
 
 
 if __name__ == '__main__':
-   api = '' #place facebook lincense code here
+   api = '' #place facebook license code here
    numPostHistory = 10000
    dictionary = newsfeedRealty(api,numPostHistory)
    print str(dictionary)
