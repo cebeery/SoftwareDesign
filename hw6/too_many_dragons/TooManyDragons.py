@@ -33,7 +33,7 @@ class TooManyDragonsModel:
             newDragon = Dragon(self) 
             self.dragons.append(newDragon)
             #the rate of dragon appearances increases as more dragons appear, until there are TOO MANY DRAGONS
-            self.dragon_frequency += (10.0 * (1.9/2.0)**self.spawnOfEvilCt)
+            self.dragon_frequency += (7.5 * (1.9/2.0)**self.spawnOfEvilCt)
             self.spawnOfEvilCt += 1
             
     def cleanModel(self):
