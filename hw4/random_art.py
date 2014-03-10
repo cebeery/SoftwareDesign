@@ -171,9 +171,9 @@ def pretty_little_picture():
     im = Image.new("RGB",(img_size,img_size))
 
     for i in range(0,img_size -1):
-        x = remap_interval(i,0,img_size -1,-1,1)
+        x = remap_interval(i,0.0,img_size -1.0,-1.0,1.0)
         for k in range(0,img_size -1):
-            y = remap_interval(i,0,img_size-1,-1,1)
+            y = remap_interval(i,0.0,img_size-1.0,-1.0,1.0)
             
             # find individual color values
             b = evaluate_random_function(blue, x, y)
@@ -181,18 +181,19 @@ def pretty_little_picture():
             g = evaluate_random_function(green, x, y)
             
             # remap to color scale
-            b = remap_interval(b,0,img_size-1,0,255)
-            r = remap_interval(r,0,img_size-1,0,255)
-            g = remap_interval(g,0,img_size-1,0,255)
+            b = int(remap_interval(b,0.0,img_size-1,0.0,255.0))
+            r = int(remap_interval(r,0.0,img_size-1,0.0,255.0))
+            g = int(remap_interval(g,0.0,img_size-1,0.0,255.0))
     
             # set pixels
 
-            ## SS: the line below gave me errors, this is the correct implementation (at least for me):
+            ## SS: the line below gave me errors, I see you've changed it since
             ##     im.putpixel([i,k], (int(r),int(g),int(b)))   
 
-            im.putpixel((i,k), [r,g,b])
+            ## im.putpixel((i,k), [r,g,b])
+            im.putpixel((i,k), (r,g,b))
       
-    im.show()      
+    im.save("image.bmp")      
             
 ## SS: All of the images that I saw were completely black. This does not appear to be working correctly.
 if __name__ == '__main__':
