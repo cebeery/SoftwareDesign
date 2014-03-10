@@ -8,6 +8,15 @@ Created on Sun Mar  2 22:36:36 2014
 from pattern.web import *
 
 
+## SS: As you stated in your reflection, it would have been cool to present your results in a different form
+##     than printing out the dictionary. But yeah, for the work of one person, this project was appropriately scoped. 
+
+## SS: This took a LOOOOONG time for me to run, a really long time actually. Mabye suggest ways to have
+##     the desired effect in a shorter amount of time (limiting the number of friends, for example)
+
+## SS: Beautiful Doc strings, for real!!! :) I'm loving this!! And in general, you have a great style, I can 
+##     understand what's going on really easily, and your code is well organized
+
 def addWeightToRelationship(person,dictionary):
     """ 
     adds a unit of "significance" to interaction of the active party; also
@@ -88,6 +97,8 @@ def freqToPercent(dictionary):
     return dictionary
     
     
+## SS: When I ran your code, I would sometimes get an URL timeout error from a function call within 
+##     the analyzeOneFriend function. It may have been my internet connection tho.  
 def analyzeOneFriend(f,me,my_friends,friend,time):
     """ 
     finds the likelyhood a wall post is from any of the user's friends
@@ -136,6 +147,9 @@ def analyzeAllFriends(f,me,my_friends,time):
     for friend in my_friends:
         name, oneFriend = analyzeOneFriend(f,me,my_friends,friend,time)
         allDict[name] = oneFriend
+
+    print name, oneFriend
+    print
         
     return allDict
 
@@ -162,6 +176,11 @@ def newsfeedRealty(api,time):
    
     # create interaction ratios for all friends
     dictionary = analyzeAllFriends(f,reformatted_user,my_friends,time)
+
+    ## SS: I used this to limit the number of friends that was used so that I could actually see a result
+    ##     since it was taking a long time 
+    ##
+    ##     dictionary = analyzeAllFriends(f,reformatted_user,my_friends[:10],time)
     
     
     return dictionary
@@ -169,6 +188,9 @@ def newsfeedRealty(api,time):
 
 if __name__ == '__main__':
    api = '' #place facebook license code here
-   numPostHistory = 10000
+   
+   ## SS: I modified the numPostHistory so it would run faster 
+
+   numPostHistory = 100
    dictionary = newsfeedRealty(api,numPostHistory)
    print str(dictionary)
